@@ -16,6 +16,7 @@ import android.widget.EditText;
 public class Client extends Activity {
 
     private Socket socket;
+    private int msgSize;
 
     private static final int SERVERPORT = 5000;
     private static final String SERVER_IP = "10.0.2.2";
@@ -28,14 +29,24 @@ public class Client extends Activity {
         new Thread(new ClientThread()).start();
     }
 
+    private String createDataSize(){
+        StringBuilder sb = new StringBuilder(msgSize);
+        for (int i=0; i<msgSize; i++) {
+            sb.append('a');
+        }
+        return sb.toString();
+    }
+
     public void onClick(View view) {
         try {
             EditText et = (EditText) findViewById(R.id.EditText01);
             String str = et.getText().toString();
+            msgSize = Integer.parseInt(str); //str is the desired length of the string
+            String sizeString = createDataSize();
             PrintWriter out = new PrintWriter(new BufferedWriter(
                     new OutputStreamWriter(socket.getOutputStream())),
                     true);
-            out.println(str);
+            out.println(sizeString);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
