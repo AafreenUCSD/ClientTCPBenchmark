@@ -1,0 +1,2 @@
+/Users/aafreensheikh/AndroidStudioProjects/AndroidSocketCLIENT/app/build/intermediates/classes/debug
+/Users/aafreensheikh/AndroidStudioProjects/AndroidSocketCLIENT/app/build/intermediates/pre-dexed/debug/support-v4-18.0.0-55c5004985803d5576f2e6a9ec0996a0cbfad19f.jar
