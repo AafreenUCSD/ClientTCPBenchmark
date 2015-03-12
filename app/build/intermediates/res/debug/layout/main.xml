@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/EditText01"
@@ -18,5 +18,12 @@
         android:onClick="onClick"
         android:text="Send" >
     </Button>
+
+    <TextView
+        android:layout_width="195dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout><!-- From: file:/Users/aafreensheikh/AndroidStudioProjects/AndroidSocketCLIENT/app/src/main/res/layout/main.xml -->
