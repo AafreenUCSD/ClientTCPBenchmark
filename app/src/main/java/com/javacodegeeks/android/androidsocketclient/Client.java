@@ -27,10 +27,10 @@ public class Client extends Activity {
     private TextView label1;
     private String read;
 
-    //private static final int SERVERPORT = 6000;
-    //private static final String SERVER_IP = "137.110.90.29";
-    private static final int SERVERPORT = 5000;
-    private static final String SERVER_IP = "10.0.2.2";
+    private static final int SERVERPORT = 6000;
+    private static final String SERVER_IP = "128.54.47.194";
+    //private static final int SERVERPORT = 5000;
+    //private static final String SERVER_IP = "10.0.2.2";
 
     Handler updateConversationHandler;
 
@@ -83,9 +83,10 @@ public class Client extends Activity {
 
     private String createDataSize() {
         StringBuilder sb = new StringBuilder(msgSize);
-        for (int i = 0; i < msgSize; i++) {
+        for (int i = 0; i < msgSize-1; i++) {
             sb.append('a');
         }
+        sb.append('z');
         return sb.toString();
     }
 
