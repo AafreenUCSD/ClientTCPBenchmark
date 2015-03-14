@@ -24,6 +24,8 @@ public class Client extends Activity {
     private Socket socket;
     private int msgSize;
     private long endTime, startTime;
+    private TextView label1;
+    private String read;
 
     //private static final int SERVERPORT = 6000;
     //private static final String SERVER_IP = "137.110.90.29";
@@ -61,7 +63,7 @@ public class Client extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
+        label1 = (TextView) findViewById(R.id.textView);
         updateConversationHandler = new Handler();
         this.clientThread = new Thread(new ClientThread());
         this.clientThread.start();
@@ -87,6 +89,7 @@ public class Client extends Activity {
         return sb.toString();
     }
 
+    /*
     public void onClick(View view) {
         try {
             EditText et = (EditText) findViewById(R.id.EditText01);
@@ -118,6 +121,32 @@ public class Client extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }*/
+
+    public void onClick(View view) {
+        try {
+            EditText et = (EditText) findViewById(R.id.EditText01);
+            String str = et.getText().toString();
+            msgSize = Integer.parseInt(str); //str is the desired length of the string
+            String sizeString = createDataSize();
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(socket.getOutputStream())),
+                    true);
+            startTime = System.nanoTime();
+            out.println(sizeString);
+                try {
+                    CommunicationThread commThread = new CommunicationThread(socket);
+                    new Thread(commThread).start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     class ClientThread implements Runnable {
@@ -135,16 +164,51 @@ public class Client extends Activity {
         }
     }
 
+    class CommunicationThread implements Runnable {
+
+        private Socket serverSocket;
+
+        private BufferedReader input;
+
+        public CommunicationThread(Socket serverSocket) {
+
+            this.serverSocket = serverSocket;
+
+            try {
+                this.input = new BufferedReader(new InputStreamReader(this.serverSocket.getInputStream()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void run() {
+
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    read = input.readLine();
+                    endTime = System.nanoTime();
+                    updateConversationHandler.post(new updateUIThread());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+
     class updateUIThread implements Runnable {
         public void updateUIThread() {
-           // endTime = System.nanoTime();
+            // endTime = System.nanoTime();
 
         }
         public void run() {
-            TextView label1 = (TextView) findViewById(R.id.textView);
             long measured_time = endTime - startTime;
             MyTime elapsedTime = getTimeString(measured_time);
-            label1.setText("RTT = " + elapsedTime.time + " " + elapsedTime.unit);
+            synchronized (label1) {
+                label1.setText("RTT = " + elapsedTime.time + " " + elapsedTime.unit);
+                //label1.setText(read);
+            }
         }
     }
 }
